@@ -19,7 +19,8 @@ export async function verifyAdminToken(): Promise<boolean> {
     const res = await fetch("/api/admin/verify", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return res.ok;
+    const data = await res.json();
+    return res.ok && data.valid === true;
   } catch {
     return false;
   }
@@ -39,7 +40,7 @@ export async function adminLogin(password: string): Promise<{ success: boolean; 
     }
     return { success: false, message: data.message ?? "Login failed." };
   } catch {
-    return { success: false, message: "Server connection error." };
+    return { success: false, message: "Could not connect to server." };
   }
 }
 
